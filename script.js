@@ -30,7 +30,7 @@ const sampleMermaid = `graph LR
 ---
 
 graph TD
-    A["時給3000円<br/>年収360万"] --> B["Larkコンサル<br/>年3件受注"]
+    A["時給3000円(年収360万)"] --> B["Larkコンサル(年3件受注)"]
     B --> C["年収738万"]
     C --> D["約2倍の収入"]
     style C fill:#4CAF50
@@ -221,23 +221,37 @@ function generateMermaidHTML(mermaidCode) {
         // Mermaidライブラリが読み込まれるまで待機
         function initializeMermaid() {
             if (typeof mermaid !== 'undefined') {
-                mermaid.initialize({
-                    startOnLoad: false,
-                    theme: 'default',
-                    flowchart: {
-                        useMaxWidth: true,
-                        htmlLabels: true,
-                        curve: 'basis'
-                    },
-                    securityLevel: 'loose'
-                });
-
-                // すべての.mermaid要素をレンダリング
-                setTimeout(function() {
-                    mermaid.run({
-                        querySelector: '.mermaid'
+                try {
+                    mermaid.initialize({
+                        startOnLoad: false,
+                        theme: 'default',
+                        themeVariables: {
+                            fontSize: '16px'
+                        },
+                        flowchart: {
+                            useMaxWidth: true,
+                            htmlLabels: true,
+                            curve: 'basis'
+                        },
+                        securityLevel: 'loose',
+                        logLevel: 'error'
                     });
-                }, 100);
+
+                    // すべての.mermaid要素をレンダリング
+                    setTimeout(function() {
+                        try {
+                            mermaid.run({
+                                querySelector: '.mermaid'
+                            }).catch(function(error) {
+                                console.error('Mermaid rendering error:', error);
+                            });
+                        } catch (e) {
+                            console.error('Mermaid run error:', e);
+                        }
+                    }, 200);
+                } catch (error) {
+                    console.error('Mermaid initialization error:', error);
+                }
             } else {
                 setTimeout(initializeMermaid, 100);
             }
@@ -287,7 +301,7 @@ function switchMode(mode) {
         htmlModeBtn.classList.remove('active');
         mermaidModeBtn.classList.add('active');
         editorTitle.textContent = 'Mermaid図表コード入力';
-        htmlInput.placeholder = 'ここにMermaid記法を入力してください...\n\n例:\ngraph TD\n    A[開始] --> B[処理]\n    B --> C[終了]';
+        htmlInput.placeholder = 'ここにMermaid記法を入力してください...\n\n例:\ngraph TD\n    A[開始] --> B[処理]\n    B --> C[終了]\n    style B fill:#4CAF50\n\n複数の図は --- で区切ります';
     }
 
     // LocalStorageにモードを保存

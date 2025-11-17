@@ -22,6 +22,10 @@ HTMLとMermaid図表を統合してリアルタイムプレビュー表示する
 
 ### 基本的な記述方法
 
+このアプリケーションは2つの入力方法をサポートしています:
+
+#### 1. 部分的なHTML + Mermaidブロック記法
+
 HTMLとMermaid図表を組み合わせて記述できます。Mermaid図表は\`\`\`mermaidブロックで囲んでください。
 
 **例:**
@@ -37,6 +41,32 @@ graph LR
 \`\`\`
 
 <p>上記のフローで処理を進めます。</p>
+```
+
+#### 2. 完全なHTMLドキュメント
+
+完全なHTMLドキュメント（`<!DOCTYPE html>`、`<html>`、`<head>`、`<body>`タグを含む）を入力することもできます。この場合、アプリケーションはそのまま表示します。
+
+**例:**
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <h1>サンプルページ</h1>
+    <div class="mermaid">
+        graph TD
+            A[開始] --> B[処理]
+            B --> C[終了]
+    </div>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>
 ```
 
 ### 複数のMermaid図表

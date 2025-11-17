@@ -104,7 +104,17 @@ function generateIntegratedHTML(inputCode) {
 </html>`;
     }
 
-    // ```mermaid ブロックを検出して置換
+    // 完全なHTMLドキュメントかどうかを判定
+    const isCompleteHTML = /<!DOCTYPE\s+html/i.test(inputCode) ||
+                           /<html[\s>]/i.test(inputCode) ||
+                           (/<head[\s>]/i.test(inputCode) && /<body[\s>]/i.test(inputCode));
+
+    // 完全なHTMLドキュメントの場合はそのまま返す
+    if (isCompleteHTML) {
+        return inputCode;
+    }
+
+    // ```mermaid ブロックを検出して置換（部分的なHTMLの場合）
     let processedHTML = inputCode;
     const mermaidBlocks = [];
     const mermaidRegex = /```mermaid\n([\s\S]*?)```/g;

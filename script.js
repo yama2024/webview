@@ -132,7 +132,7 @@ function generateIntegratedHTML(inputCode) {
 
     // プレースホルダーをMermaid HTMLに置き換え
     mermaidBlocks.forEach((code, idx) => {
-        const mermaidHTML = `<div class="mermaid-diagram"><pre class="mermaid">${code}</pre></div>`;
+        const mermaidHTML = `<div class="mermaid-diagram"><div class="mermaid">${code}</div></div>`;
         processedHTML = processedHTML.replace(`___MERMAID_PLACEHOLDER_${idx}___`, mermaidHTML);
     });
 
@@ -181,16 +181,17 @@ function generateIntegratedHTML(inputCode) {
             margin: 30px 0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             overflow-x: auto;
+            text-align: center;
         }
         .mermaid {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: block;
+            text-align: center;
             min-height: 200px;
         }
         .mermaid svg {
             max-width: 100%;
             height: auto;
+            display: inline-block;
         }
     </style>
 </head>
@@ -198,7 +199,7 @@ function generateIntegratedHTML(inputCode) {
     ${processedHTML}
     <script>
         // Mermaidライブラリが読み込まれるまで待機
-        function initializeMermaid() {
+        async function initializeMermaid() {
             if (typeof mermaid !== 'undefined') {
                 try {
                     mermaid.initialize({
@@ -217,17 +218,15 @@ function generateIntegratedHTML(inputCode) {
                     });
 
                     // すべての.mermaid要素をレンダリング
-                    setTimeout(function() {
+                    setTimeout(async function() {
                         try {
-                            mermaid.run({
+                            await mermaid.run({
                                 querySelector: '.mermaid'
-                            }).catch(function(error) {
-                                console.error('Mermaid rendering error:', error);
                             });
-                        } catch (e) {
-                            console.error('Mermaid run error:', e);
+                        } catch (error) {
+                            console.error('Mermaid rendering error:', error);
                         }
-                    }, 200);
+                    }, 300);
                 } catch (error) {
                     console.error('Mermaid initialization error:', error);
                 }
@@ -237,7 +236,11 @@ function generateIntegratedHTML(inputCode) {
         }
 
         // ページロード後に初期化
-        window.addEventListener('load', initializeMermaid);
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeMermaid);
+        } else {
+            initializeMermaid();
+        }
     </script>
 </body>
 </html>`;

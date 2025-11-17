@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Viewer - HTMLコードプレビューアプリ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>HTML Viewer</h1>
+            <p class="subtitle">HTMLコードを入力してリアルタイムプレビュー</p>
+        </header>
+
+        <div class="controls">
+            <button id="clearBtn" class="btn">クリア</button>
+            <button id="sampleBtn" class="btn btn-secondary">サンプルを読み込む</button>
+        </div>
+
+        <div class="main-content">
+            <div class="editor-section">
+                <h2>HTMLコード入力</h2>
+                <textarea
+                    id="htmlInput"
+                    placeholder="ここにHTMLコードを入力してください...&#10;&#10;例:&#10;<h1>こんにちは</h1>&#10;<p>これはサンプルです</p>"
+                    spellcheck="false"
+                ></textarea>
+            </div>
+
+            <div class="preview-section">
+                <h2>プレビュー</h2>
+                <iframe
+                    id="preview"
+                    sandbox="allow-same-origin"
+                    title="HTMLプレビュー"
+                ></iframe>
+            </div>
+        </div>
+
+        <footer>
+            <p>HTMLコードを安全に表示するためsandbox属性を使用しています</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

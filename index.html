@@ -3,22 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Viewer & Mermaid Visualizer - コードプレビューアプリ</title>
+    <title>HTML & Mermaid Visualizer - 統合プレビューアプリ</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>HTML Viewer & Mermaid Visualizer</h1>
-            <p class="subtitle">HTMLコード・Mermaid図表をリアルタイムプレビュー</p>
+            <h1>HTML & Mermaid Visualizer</h1>
+            <p class="subtitle">HTML + Mermaid図表を統合プレビュー</p>
         </header>
 
         <div class="controls">
-            <div class="mode-switcher">
-                <button id="htmlModeBtn" class="btn-mode active">HTMLモード</button>
-                <button id="mermaidModeBtn" class="btn-mode">Mermaid図表モード</button>
-            </div>
             <div class="control-buttons">
                 <button id="clearBtn" class="btn">クリア</button>
                 <button id="sampleBtn" class="btn btn-secondary">サンプルを読み込む</button>
@@ -27,10 +23,10 @@
 
         <div class="main-content">
             <div class="editor-section">
-                <h2 id="editorTitle">HTMLコード入力</h2>
+                <h2>HTML + Mermaid コード入力</h2>
                 <textarea
                     id="htmlInput"
-                    placeholder="ここにHTMLコードを入力してください...&#10;&#10;例:&#10;<h1>こんにちは</h1>&#10;<p>これはサンプルです</p>"
+                    placeholder="HTMLとMermaidを統合して記述できます&#10;&#10;Mermaid図表は ```mermaid ブロックで囲んでください:&#10;&#10;<h1>タイトル</h1>&#10;<p>説明文</p>&#10;&#10;```mermaid&#10;graph LR&#10;    A[開始] --> B[終了]&#10;```"
                     spellcheck="false"
                 ></textarea>
             </div>

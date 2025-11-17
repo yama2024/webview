@@ -7,15 +7,16 @@ const maximizeBtn = document.getElementById('maximizeBtn');
 const maximizedOverlay = document.getElementById('maximizedOverlay');
 const previewMaximized = document.getElementById('previewMaximized');
 const closeMaximizeBtn = document.getElementById('closeMaximizeBtn');
-const htmlModeBtn = document.getElementById('htmlModeBtn');
-const mermaidModeBtn = document.getElementById('mermaidModeBtn');
-const editorTitle = document.getElementById('editorTitle');
 
-// 現在のモード管理
-let currentMode = 'html'; // 'html' or 'mermaid'
+// サンプル統合コード（HTML + Mermaid）
+const sampleCode = `<h1>プロジェクト管理フロー</h1>
+<p>このページでは、HTMLとMermaid図表を統合して表示できます。</p>
 
-// サンプルMermaidコード
-const sampleMermaid = `graph LR
+<h2>ワークフローの流れ</h2>
+<p>以下の図は、企画から精算完了までのプロセスを示しています。</p>
+
+\`\`\`mermaid
+graph LR
     A["企画段階"] --> B["グループ作成前"]
     B --> C["開催可能"]
     C --> D["開催済み"]
@@ -26,18 +27,23 @@ const sampleMermaid = `graph LR
     D -.->|自動集計| I["参加者データ"]
     style C fill:#4CAF50
     style E fill:#2196F3
+\`\`\`
 
----
+<h2>収入比較分析</h2>
+<p>時給制とコンサル受注の収入を比較したグラフです。</p>
 
+\`\`\`mermaid
 graph TD
     A["時給3000円(年収360万)"] --> B["Larkコンサル(年3件受注)"]
     B --> C["年収738万"]
     C --> D["約2倍の収入"]
     style C fill:#4CAF50
     style D fill:#FFC107
+\`\`\`
 
----
+<h2>データ処理フロー</h2>
 
+\`\`\`mermaid
 graph TB
     Start["開始"] --> Input["データ入力"]
     Input --> Process["データ処理"]
@@ -47,85 +53,16 @@ graph TB
     Error --> Input
     Success --> End["終了"]
     style Success fill:#4CAF50
-    style Error fill:#f44336`;
+    style Error fill:#f44336
+\`\`\`
 
-// サンプルHTMLコード
-const sampleHTML = `<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background: linear-gradient(to bottom, #e0f7fa, #ffffff);
-        }
-        h1 {
-            color: #00796b;
-            text-align: center;
-            border-bottom: 3px solid #00796b;
-            padding-bottom: 10px;
-        }
-        .card {
-            background: white;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .highlight {
-            background: #ffeb3b;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-        ul {
-            line-height: 1.8;
-        }
-    </style>
-</head>
-<body>
-    <h1>サンプルHTMLページ</h1>
-
-    <div class="card">
-        <h2>ようこそ！</h2>
-        <p>これは<span class="highlight">HTML Viewer</span>のサンプルページです。</p>
-        <p>左側のエディタでHTMLコードを編集すると、リアルタイムでプレビューが更新されます。</p>
-    </div>
-
-    <div class="card">
-        <h2>主な機能</h2>
-        <ul>
-            <li>リアルタイムHTMLプレビュー</li>
-            <li>シンプルで使いやすいインターフェース</li>
-            <li>レスポンシブデザイン対応</li>
-            <li>安全なサンドボックス環境</li>
-        </ul>
-    </div>
-
-    <div class="card">
-        <h2>使い方</h2>
-        <ol>
-            <li>左側のテキストエリアにHTMLコードを入力</li>
-            <li>自動的に右側にプレビューが表示されます</li>
-            <li>「クリア」ボタンで内容をリセット</li>
-        </ol>
-    </div>
-</body>
-</html>`;
+<hr>
+<p><strong>注意:</strong> Mermaid図表は <code>\`\`\`mermaid</code> ブロックで囲んでください。</p>`;
 
 // HTMLプレビューを更新する関数
 function updatePreview() {
-    let htmlContent;
-
-    if (currentMode === 'mermaid') {
-        // Mermaidモード: Mermaid記法をHTMLに変換
-        htmlContent = generateMermaidHTML(htmlInput.value);
-    } else {
-        // HTMLモード: そのまま表示
-        htmlContent = htmlInput.value;
-    }
+    // 入力されたコードから```mermaidブロックを検出して統合HTMLを生成
+    const htmlContent = generateIntegratedHTML(htmlInput.value);
 
     // 通常のプレビューiframeを更新
     const iframeDoc = preview.contentDocument || preview.contentWindow.document;
@@ -140,10 +77,10 @@ function updatePreview() {
     maximizedIframeDoc.close();
 }
 
-// Mermaid記法をHTMLに変換する関数
-function generateMermaidHTML(mermaidCode) {
+// HTML + Mermaid統合コードを生成する関数
+function generateIntegratedHTML(inputCode) {
     // 空の場合
-    if (!mermaidCode.trim()) {
+    if (!inputCode.trim()) {
         return `<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -162,20 +99,33 @@ function generateMermaidHTML(mermaidCode) {
     </style>
 </head>
 <body>
-    <p>Mermaid記法を入力してください...</p>
+    <p>HTMLコードまたはMermaid記法を入力してください...</p>
 </body>
 </html>`;
     }
 
-    // ---で区切られた複数の図を処理
-    const diagrams = mermaidCode.split(/\n---\n/).filter(d => d.trim());
+    // ```mermaid ブロックを検出して置換
+    let processedHTML = inputCode;
+    const mermaidBlocks = [];
+    const mermaidRegex = /```mermaid\n([\s\S]*?)```/g;
+    let match;
+    let index = 0;
 
-    let diagramsHTML = diagrams.map((diagram, index) => {
-        return `<div class="mermaid-container">
-            <pre class="mermaid">${diagram.trim()}</pre>
-        </div>`;
-    }).join('\n');
+    // Mermaidブロックを一時的にプレースホルダーに置き換え
+    while ((match = mermaidRegex.exec(inputCode)) !== null) {
+        const mermaidCode = match[1].trim();
+        mermaidBlocks.push(mermaidCode);
+        processedHTML = processedHTML.replace(match[0], `___MERMAID_PLACEHOLDER_${index}___`);
+        index++;
+    }
 
+    // プレースホルダーをMermaid HTMLに置き換え
+    mermaidBlocks.forEach((code, idx) => {
+        const mermaidHTML = `<div class="mermaid-diagram"><pre class="mermaid">${code}</pre></div>`;
+        processedHTML = processedHTML.replace(`___MERMAID_PLACEHOLDER_${idx}___`, mermaidHTML);
+    });
+
+    // 完全なHTMLドキュメントを生成
     return `<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -184,23 +134,42 @@ function generateMermaidHTML(mermaidCode) {
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 40px 20px;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
+            line-height: 1.8;
+            color: #333;
         }
-        .mermaid-container {
+        h1, h2, h3 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        h1 { font-size: 2.5em; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+        h2 { font-size: 2em; border-bottom: 2px solid #667eea; padding-bottom: 8px; }
+        h3 { font-size: 1.5em; }
+        p { margin: 1em 0; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #ddd;
+            margin: 2em 0;
+        }
+        .mermaid-diagram {
             background: white;
             border-radius: 12px;
             padding: 30px;
-            margin: 20px auto;
-            max-width: 1200px;
+            margin: 30px 0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             overflow-x: auto;
-        }
-        .mermaid-container:first-child {
-            margin-top: 0;
         }
         .mermaid {
             display: flex;
@@ -208,7 +177,6 @@ function generateMermaidHTML(mermaidCode) {
             align-items: center;
             min-height: 200px;
         }
-        /* Mermaidのスタイルカスタマイズ */
         .mermaid svg {
             max-width: 100%;
             height: auto;
@@ -216,7 +184,7 @@ function generateMermaidHTML(mermaidCode) {
     </style>
 </head>
 <body>
-    ${diagramsHTML}
+    ${processedHTML}
     <script>
         // Mermaidライブラリが読み込まれるまで待機
         function initializeMermaid() {
@@ -278,51 +246,13 @@ clearBtn.addEventListener('click', () => {
 // サンプル読み込みボタンのイベントリスナー
 sampleBtn.addEventListener('click', () => {
     if (htmlInput.value.trim() === '' || confirm('現在の内容をサンプルで上書きしてもよろしいですか？')) {
-        if (currentMode === 'mermaid') {
-            htmlInput.value = sampleMermaid;
-        } else {
-            htmlInput.value = sampleHTML;
-        }
+        htmlInput.value = sampleCode;
         updatePreview();
     }
 });
 
-// モード切り替え機能
-function switchMode(mode) {
-    currentMode = mode;
-
-    // ボタンのアクティブ状態を切り替え
-    if (mode === 'html') {
-        htmlModeBtn.classList.add('active');
-        mermaidModeBtn.classList.remove('active');
-        editorTitle.textContent = 'HTMLコード入力';
-        htmlInput.placeholder = 'ここにHTMLコードを入力してください...\n\n例:\n<h1>こんにちは</h1>\n<p>これはサンプルです</p>';
-    } else {
-        htmlModeBtn.classList.remove('active');
-        mermaidModeBtn.classList.add('active');
-        editorTitle.textContent = 'Mermaid図表コード入力';
-        htmlInput.placeholder = 'ここにMermaid記法を入力してください...\n\n例:\ngraph TD\n    A[開始] --> B[処理]\n    B --> C[終了]\n    style B fill:#4CAF50\n\n複数の図は --- で区切ります';
-    }
-
-    // LocalStorageにモードを保存
-    localStorage.setItem('htmlViewerMode', mode);
-
-    // プレビューを更新
-    updatePreview();
-}
-
-// モード切り替えボタンのイベントリスナー
-htmlModeBtn.addEventListener('click', () => switchMode('html'));
-mermaidModeBtn.addEventListener('click', () => switchMode('mermaid'));
-
 // ページ読み込み時の初期化
 window.addEventListener('DOMContentLoaded', () => {
-    // 保存されたモードを復元
-    const savedMode = localStorage.getItem('htmlViewerMode');
-    if (savedMode && (savedMode === 'html' || savedMode === 'mermaid')) {
-        switchMode(savedMode);
-    }
-
     // 保存されたコンテンツを復元
     const savedContent = localStorage.getItem('htmlViewerContent');
     if (savedContent) {
@@ -330,11 +260,7 @@ window.addEventListener('DOMContentLoaded', () => {
         updatePreview();
     } else {
         // 保存されていない場合はサンプルを表示
-        if (currentMode === 'mermaid') {
-            htmlInput.value = sampleMermaid;
-        } else {
-            htmlInput.value = sampleHTML;
-        }
+        htmlInput.value = sampleCode;
         updatePreview();
     }
 });

@@ -17,14 +17,14 @@ const sampleCode = `<h1>プロジェクト管理フロー</h1>
 
 \`\`\`mermaid
 graph LR
-    A["企画段階"] --> B["グループ作成前"]
-    B --> C["開催可能"]
-    C --> D["開催済み"]
-    D --> E["精算完了"]
-    A -.->|自動通知| F["担当者チャット"]
-    B -.->|自動作成| G["登壇者チャット"]
-    C -.->|リマインド| H["参加者通知"]
-    D -.->|自動集計| I["参加者データ"]
+    A[企画段階] --> B[グループ作成前]
+    B --> C[開催可能]
+    C --> D[開催済み]
+    D --> E[精算完了]
+    A -.->|自動通知| F[担当者チャット]
+    B -.->|自動作成| G[登壇者チャット]
+    C -.->|リマインド| H[参加者通知]
+    D -.->|自動集計| I[参加者データ]
     style C fill:#4CAF50
     style E fill:#2196F3
 \`\`\`
@@ -34,9 +34,9 @@ graph LR
 
 \`\`\`mermaid
 graph TD
-    A["時給3000円(年収360万)"] --> B["Larkコンサル(年3件受注)"]
-    B --> C["年収738万"]
-    C --> D["約2倍の収入"]
+    A[時給3000円-年収360万] --> B[Larkコンサル-年3件受注]
+    B --> C[年収738万]
+    C --> D[約2倍の収入]
     style C fill:#4CAF50
     style D fill:#FFC107
 \`\`\`
@@ -45,13 +45,13 @@ graph TD
 
 \`\`\`mermaid
 graph TB
-    Start["開始"] --> Input["データ入力"]
-    Input --> Process["データ処理"]
-    Process --> Decision{"条件判定"}
-    Decision -->|Yes| Success["成功"]
-    Decision -->|No| Error["エラー"]
+    Start[開始] --> Input[データ入力]
+    Input --> Process[データ処理]
+    Process --> Decision{条件判定}
+    Decision -->|Yes| Success[成功]
+    Decision -->|No| Error[エラー]
     Error --> Input
-    Success --> End["終了"]
+    Success --> End[終了]
     style Success fill:#4CAF50
     style Error fill:#f44336
 \`\`\`

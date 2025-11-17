@@ -16,29 +16,29 @@ const sampleCode = `<h1>HTML & Mermaid Visualizer の使い方</h1>
 <p>Mermaid図表は <code>\`\`\`mermaid</code> と <code>\`\`\`</code> で囲みます。</p>
 
 \`\`\`mermaid
-graph LR
+flowchart LR
     A[開始] --> B[処理]
     B --> C[完了]
     style B fill:#4CAF50
 \`\`\`
 
 <h2>2. 縦方向のフロー</h2>
-<p>graph TBで上から下への流れを表現できます。</p>
+<p>flowchart TBで上から下への流れを表現できます。</p>
 
 \`\`\`mermaid
-graph TB
+flowchart TB
     Start[スタート] --> Step1[ステップ1]
     Step1 --> Step2[ステップ2]
-    Step2 --> End[終了]
+    Step2 --> Finish[完了]
     style Start fill:#2196F3
-    style End fill:#4CAF50
+    style Finish fill:#4CAF50
 \`\`\`
 
 <h2>3. 条件分岐の表現</h2>
 <p>菱形{}を使って条件分岐を表現できます。</p>
 
 \`\`\`mermaid
-graph TD
+flowchart TD
     A[開始] --> B{判定}
     B --> C[YES]
     B --> D[NO]
@@ -55,6 +55,7 @@ graph TD
     <li>矢印は <code>--&gt;</code> を使用</li>
     <li>色付けは <code>style ノード名 fill:#色コード</code></li>
     <li>HTMLとMermaidを自由に組み合わせ可能</li>
+    <li>Mermaid 10.x系では <code>flowchart</code> を使用（<code>graph</code> は非推奨）</li>
 </ul>
 
 <p><strong>ヒント:</strong> 左側のテキストエリアで編集すると、右側にリアルタイムでプレビューが表示されます。</p>`;

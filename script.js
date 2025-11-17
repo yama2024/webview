@@ -9,55 +9,55 @@ const previewMaximized = document.getElementById('previewMaximized');
 const closeMaximizeBtn = document.getElementById('closeMaximizeBtn');
 
 // サンプル統合コード（HTML + Mermaid）
-const sampleCode = `<h1>プロジェクト管理フロー</h1>
-<p>このページでは、HTMLとMermaid図表を統合して表示できます。</p>
+const sampleCode = `<h1>HTML & Mermaid Visualizer の使い方</h1>
+<p>このツールでは、HTMLとMermaid図表を組み合わせた文書を簡単に作成できます。</p>
 
-<h2>ワークフローの流れ</h2>
-<p>以下の図は、企画から精算完了までのプロセスを示しています。</p>
+<h2>1. 基本的なフローチャート</h2>
+<p>Mermaid図表は <code>\`\`\`mermaid</code> と <code>\`\`\`</code> で囲みます。</p>
 
 \`\`\`mermaid
 graph LR
-    A[企画段階] --> B[グループ作成前]
-    B --> C[開催可能]
-    C --> D[開催済み]
-    D --> E[精算完了]
-    A -.->|自動通知| F[担当者チャット]
-    B -.->|自動作成| G[登壇者チャット]
-    C -.->|リマインド| H[参加者通知]
-    D -.->|自動集計| I[参加者データ]
-    style C fill:#4CAF50
-    style E fill:#2196F3
+    A[開始] --> B[処理]
+    B --> C[完了]
+    style B fill:#4CAF50
 \`\`\`
 
-<h2>収入比較分析</h2>
-<p>時給制とコンサル受注の収入を比較したグラフです。</p>
-
-\`\`\`mermaid
-graph TD
-    A[時給3000円-年収360万] --> B[Larkコンサル-年3件受注]
-    B --> C[年収738万]
-    C --> D[約2倍の収入]
-    style C fill:#4CAF50
-    style D fill:#FFC107
-\`\`\`
-
-<h2>データ処理フロー</h2>
+<h2>2. 縦方向のフロー</h2>
+<p>graph TBで上から下への流れを表現できます。</p>
 
 \`\`\`mermaid
 graph TB
-    Start[開始] --> Input[データ入力]
-    Input --> Process[データ処理]
-    Process --> Decision{条件判定}
-    Decision -->|Yes| Success[成功]
-    Decision -->|No| Error[エラー]
-    Error --> Input
-    Success --> End[終了]
-    style Success fill:#4CAF50
-    style Error fill:#f44336
+    Start[スタート] --> Step1[ステップ1]
+    Step1 --> Step2[ステップ2]
+    Step2 --> End[終了]
+    style Start fill:#2196F3
+    style End fill:#4CAF50
+\`\`\`
+
+<h2>3. 条件分岐の表現</h2>
+<p>菱形{}を使って条件分岐を表現できます。</p>
+
+\`\`\`mermaid
+graph TD
+    A[開始] --> B{判定}
+    B --> C[YES]
+    B --> D[NO]
+    C --> E[終了]
+    D --> E
+    style B fill:#FFC107
+    style E fill:#4CAF50
 \`\`\`
 
 <hr>
-<p><strong>注意:</strong> Mermaid図表は <code>\`\`\`mermaid</code> ブロックで囲んでください。</p>`;
+<h2>使い方のポイント</h2>
+<ul>
+    <li>ノードラベルは角括弧で囲む: <code>A[ラベル]</code></li>
+    <li>矢印は <code>--&gt;</code> を使用</li>
+    <li>色付けは <code>style ノード名 fill:#色コード</code></li>
+    <li>HTMLとMermaidを自由に組み合わせ可能</li>
+</ul>
+
+<p><strong>ヒント:</strong> 左側のテキストエリアで編集すると、右側にリアルタイムでプレビューが表示されます。</p>`;
 
 // HTMLプレビューを更新する関数
 function updatePreview() {

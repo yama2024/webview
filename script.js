@@ -218,15 +218,33 @@ function generateMermaidHTML(mermaidCode) {
 <body>
     ${diagramsHTML}
     <script>
-        mermaid.initialize({
-            startOnLoad: true,
-            theme: 'default',
-            flowchart: {
-                useMaxWidth: true,
-                htmlLabels: true,
-                curve: 'basis'
+        // Mermaidライブラリが読み込まれるまで待機
+        function initializeMermaid() {
+            if (typeof mermaid !== 'undefined') {
+                mermaid.initialize({
+                    startOnLoad: false,
+                    theme: 'default',
+                    flowchart: {
+                        useMaxWidth: true,
+                        htmlLabels: true,
+                        curve: 'basis'
+                    },
+                    securityLevel: 'loose'
+                });
+
+                // すべての.mermaid要素をレンダリング
+                setTimeout(function() {
+                    mermaid.run({
+                        querySelector: '.mermaid'
+                    });
+                }, 100);
+            } else {
+                setTimeout(initializeMermaid, 100);
             }
-        });
+        }
+
+        // ページロード後に初期化
+        window.addEventListener('load', initializeMermaid);
     </script>
 </body>
 </html>`;

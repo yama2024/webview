@@ -67,7 +67,11 @@ graph LR
 
 ## セキュリティ
 
-iframeに`sandbox="allow-same-origin"`属性を設定することで、スクリプトの実行を制限し、安全にHTMLを表示しています。
+iframeに`sandbox="allow-same-origin allow-scripts"`属性を設定しています。
+- `allow-same-origin`: 同一オリジンポリシーを許可
+- `allow-scripts`: Mermaid図表レンダリングに必要なJavaScript実行を許可
+
+ユーザー入力は信頼できないコードとして隔離されたiframe内で実行されるため、安全性が確保されています。
 
 ## ブラウザ対応
 

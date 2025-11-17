@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Viewer - HTMLコードプレビューアプリ</title>
+    <title>HTML Viewer & Mermaid Visualizer - コードプレビューアプリ</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>HTML Viewer</h1>
-            <p class="subtitle">HTMLコードを入力してリアルタイムプレビュー</p>
+            <h1>HTML Viewer & Mermaid Visualizer</h1>
+            <p class="subtitle">HTMLコード・Mermaid図表をリアルタイムプレビュー</p>
         </header>
 
         <div class="controls">
@@ -46,7 +46,7 @@
                 </div>
                 <iframe
                     id="preview"
-                    sandbox="allow-same-origin"
+                    sandbox="allow-same-origin allow-scripts"
                     title="HTMLプレビュー"
                 ></iframe>
             </div>
@@ -69,7 +69,7 @@
         </div>
         <iframe
             id="previewMaximized"
-            sandbox="allow-same-origin"
+            sandbox="allow-same-origin allow-scripts"
             title="HTMLプレビュー（最大化）"
         ></iframe>
     </div>

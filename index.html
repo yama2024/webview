@@ -29,7 +29,14 @@
             </div>
 
             <div class="preview-section">
-                <h2>プレビュー</h2>
+                <div class="preview-header">
+                    <h2>プレビュー</h2>
+                    <button id="maximizeBtn" class="btn-icon" title="プレビューを最大化">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                        </svg>
+                    </button>
+                </div>
                 <iframe
                     id="preview"
                     sandbox="allow-same-origin"
@@ -41,6 +48,23 @@
         <footer>
             <p>HTMLコードを安全に表示するためsandbox属性を使用しています</p>
         </footer>
+    </div>
+
+    <!-- 最大化モード用オーバーレイ -->
+    <div id="maximizedOverlay" class="maximized-overlay hidden">
+        <div class="maximized-header">
+            <h2>プレビュー（最大化）</h2>
+            <button id="closeMaximizeBtn" class="btn-close" title="閉じる (ESC)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <iframe
+            id="previewMaximized"
+            sandbox="allow-same-origin"
+            title="HTMLプレビュー（最大化）"
+        ></iframe>
     </div>
 
     <script src="script.js"></script>

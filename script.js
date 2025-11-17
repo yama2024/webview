@@ -3,6 +3,10 @@ const htmlInput = document.getElementById('htmlInput');
 const preview = document.getElementById('preview');
 const clearBtn = document.getElementById('clearBtn');
 const sampleBtn = document.getElementById('sampleBtn');
+const maximizeBtn = document.getElementById('maximizeBtn');
+const maximizedOverlay = document.getElementById('maximizedOverlay');
+const previewMaximized = document.getElementById('previewMaximized');
+const closeMaximizeBtn = document.getElementById('closeMaximizeBtn');
 
 // サンプルHTMLコード
 const sampleHTML = `<!DOCTYPE html>
@@ -74,13 +78,17 @@ const sampleHTML = `<!DOCTYPE html>
 function updatePreview() {
     const htmlContent = htmlInput.value;
 
-    // iframeのドキュメントを取得して内容を書き込む
+    // 通常のプレビューiframeを更新
     const iframeDoc = preview.contentDocument || preview.contentWindow.document;
-
-    // HTMLを書き込む
     iframeDoc.open();
     iframeDoc.write(htmlContent);
     iframeDoc.close();
+
+    // 最大化プレビューiframeも更新
+    const maximizedIframeDoc = previewMaximized.contentDocument || previewMaximized.contentWindow.document;
+    maximizedIframeDoc.open();
+    maximizedIframeDoc.write(htmlContent);
+    maximizedIframeDoc.close();
 }
 
 // 入力時のイベントリスナー（リアルタイムプレビュー）
@@ -123,5 +131,41 @@ window.addEventListener('DOMContentLoaded', () => {
     if (savedContent) {
         htmlInput.value = savedContent;
         updatePreview();
+    }
+});
+
+// ===== 最大化機能 =====
+
+// プレビューを最大化する関数
+function maximizePreview() {
+    maximizedOverlay.classList.remove('hidden');
+    // body のスクロールを無効化
+    document.body.style.overflow = 'hidden';
+}
+
+// プレビューを閉じる関数
+function closeMaximize() {
+    maximizedOverlay.classList.add('hidden');
+    // body のスクロールを有効化
+    document.body.style.overflow = '';
+}
+
+// 最大化ボタンのイベントリスナー
+maximizeBtn.addEventListener('click', maximizePreview);
+
+// 閉じるボタンのイベントリスナー
+closeMaximizeBtn.addEventListener('click', closeMaximize);
+
+// ESCキーで閉じる
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !maximizedOverlay.classList.contains('hidden')) {
+        closeMaximize();
+    }
+});
+
+// オーバーレイの背景をクリックして閉じる（オプション）
+maximizedOverlay.addEventListener('click', (e) => {
+    if (e.target === maximizedOverlay) {
+        closeMaximize();
     }
 });

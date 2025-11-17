@@ -18,6 +18,8 @@
             <div class="control-buttons">
                 <button id="clearBtn" class="btn">クリア</button>
                 <button id="sampleBtn" class="btn btn-secondary">サンプルを読み込む</button>
+                <button id="saveHistoryBtn" class="btn btn-primary">履歴を保存</button>
+                <button id="historyBtn" class="btn btn-secondary">履歴</button>
             </div>
         </div>
 
@@ -68,6 +70,27 @@
             sandbox="allow-same-origin allow-scripts"
             title="HTMLプレビュー（最大化）"
         ></iframe>
+    </div>
+
+    <!-- 履歴管理モーダル -->
+    <div id="historyOverlay" class="history-overlay hidden">
+        <div class="history-modal">
+            <div class="history-header">
+                <h2>履歴管理</h2>
+                <button id="closeHistoryBtn" class="btn-close" title="閉じる (ESC)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="history-controls">
+                <button id="clearAllHistoryBtn" class="btn btn-danger">全て削除</button>
+                <p class="history-count">保存済み: <span id="historyCount">0</span> 件</p>
+            </div>
+            <div class="history-content" id="historyContent">
+                <p class="history-empty">保存された履歴がありません</p>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

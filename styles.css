@@ -303,3 +303,217 @@ footer {
 #htmlInput::-webkit-scrollbar-thumb:hover {
     background: #5568d3;
 }
+
+/* 履歴ボタンスタイル */
+.btn-primary {
+    background: #28a745;
+}
+
+.btn-primary:hover {
+    background: #218838;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+/* 履歴モーダルオーバーレイ */
+.history-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+    padding: 20px;
+}
+
+.history-overlay.hidden {
+    display: none;
+}
+
+.history-modal {
+    background: white;
+    border-radius: 12px;
+    max-width: 1200px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.history-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.history-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.history-controls {
+    padding: 20px 30px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-count {
+    margin: 0;
+    font-size: 1rem;
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.history-count span {
+    color: #667eea;
+    font-size: 1.2rem;
+}
+
+.history-content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    min-height: 300px;
+}
+
+.history-empty {
+    text-align: center;
+    color: #6c757d;
+    font-size: 1.1rem;
+    padding: 60px 20px;
+}
+
+/* 履歴グリッド */
+.history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.history-item {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.history-item:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    transform: translateY(-2px);
+}
+
+.history-item-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.history-item-date {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.history-item-preview {
+    font-size: 0.85rem;
+    color: #6c757d;
+    background: white;
+    padding: 10px;
+    border-radius: 4px;
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.history-item-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.history-item-actions .btn {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+/* 履歴コンテンツのスクロールバー */
+.history-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.history-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.history-content::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+.history-content::-webkit-scrollbar-thumb:hover {
+    background: #5568d3;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .history-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-controls {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    .history-count {
+        text-align: center;
+    }
+}

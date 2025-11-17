@@ -7,6 +7,13 @@ const maximizeBtn = document.getElementById('maximizeBtn');
 const maximizedOverlay = document.getElementById('maximizedOverlay');
 const previewMaximized = document.getElementById('previewMaximized');
 const closeMaximizeBtn = document.getElementById('closeMaximizeBtn');
+const saveHistoryBtn = document.getElementById('saveHistoryBtn');
+const historyBtn = document.getElementById('historyBtn');
+const historyOverlay = document.getElementById('historyOverlay');
+const closeHistoryBtn = document.getElementById('closeHistoryBtn');
+const clearAllHistoryBtn = document.getElementById('clearAllHistoryBtn');
+const historyContent = document.getElementById('historyContent');
+const historyCount = document.getElementById('historyCount');
 
 // サンプル統合コード（HTML + Mermaid）
 const sampleCode = `<h1>HTML & Mermaid Visualizer の使い方</h1>
@@ -308,8 +315,12 @@ closeMaximizeBtn.addEventListener('click', closeMaximize);
 
 // ESCキーで閉じる
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !maximizedOverlay.classList.contains('hidden')) {
-        closeMaximize();
+    if (e.key === 'Escape') {
+        if (!maximizedOverlay.classList.contains('hidden')) {
+            closeMaximize();
+        } else if (!historyOverlay.classList.contains('hidden')) {
+            closeHistory();
+        }
     }
 });
 
@@ -317,5 +328,199 @@ document.addEventListener('keydown', (e) => {
 maximizedOverlay.addEventListener('click', (e) => {
     if (e.target === maximizedOverlay) {
         closeMaximize();
+    }
+});
+
+// ===== 履歴管理機能 =====
+
+// 履歴の保存・読み込み
+const HISTORY_STORAGE_KEY = 'htmlViewerHistories';
+const MAX_HISTORY_COUNT = 20;
+
+// 履歴を取得する関数
+function getHistories() {
+    try {
+        const histories = localStorage.getItem(HISTORY_STORAGE_KEY);
+        return histories ? JSON.parse(histories) : [];
+    } catch (error) {
+        console.error('履歴の読み込みエラー:', error);
+        return [];
+    }
+}
+
+// 履歴を保存する関数
+function saveHistories(histories) {
+    try {
+        localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(histories));
+    } catch (error) {
+        console.error('履歴の保存エラー:', error);
+        alert('履歴の保存に失敗しました。LocalStorageの容量を確認してください。');
+    }
+}
+
+// タイトルを自動生成する関数
+function generateTitle(content) {
+    // <h1>タグからタイトルを抽出
+    const h1Match = content.match(/<h1[^>]*>(.*?)<\/h1>/i);
+    if (h1Match && h1Match[1].trim()) {
+        // HTMLタグを除去
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = h1Match[1];
+        return tempDiv.textContent.trim().substring(0, 50);
+    }
+
+    // <h1>がない場合は日時をタイトルにする
+    const now = new Date();
+    return `保存 ${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+}
+
+// 現在のコンテンツを履歴に保存する関数
+function saveToHistory() {
+    const content = htmlInput.value.trim();
+
+    if (!content) {
+        alert('保存するコンテンツがありません');
+        return;
+    }
+
+    const histories = getHistories();
+    const timestamp = Date.now();
+    const title = generateTitle(content);
+    const preview = content.substring(0, 100);
+
+    // 新しい履歴アイテムを作成
+    const newHistoryItem = {
+        id: timestamp.toString(),
+        title: title,
+        content: content,
+        timestamp: timestamp,
+        preview: preview
+    };
+
+    // 履歴の先頭に追加
+    histories.unshift(newHistoryItem);
+
+    // 上限を超えた場合は古いものを削除
+    if (histories.length > MAX_HISTORY_COUNT) {
+        histories.splice(MAX_HISTORY_COUNT);
+    }
+
+    saveHistories(histories);
+    updateHistoryDisplay();
+    alert('履歴に保存しました');
+}
+
+// 履歴表示を更新する関数
+function updateHistoryDisplay() {
+    const histories = getHistories();
+    historyCount.textContent = histories.length;
+
+    if (histories.length === 0) {
+        historyContent.innerHTML = '<p class="history-empty">保存された履歴がありません</p>';
+        return;
+    }
+
+    // グリッド表示を作成
+    const gridHTML = histories.map(item => {
+        const date = new Date(item.timestamp);
+        const dateStr = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+        return `
+            <div class="history-item" data-id="${item.id}">
+                <div class="history-item-title" title="${item.title}">${item.title}</div>
+                <div class="history-item-date">${dateStr}</div>
+                <div class="history-item-preview">${item.preview.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                <div class="history-item-actions">
+                    <button class="btn btn-primary btn-load-history" data-id="${item.id}">読み込み</button>
+                    <button class="btn btn-danger btn-delete-history" data-id="${item.id}">削除</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    historyContent.innerHTML = `<div class="history-grid">${gridHTML}</div>`;
+
+    // イベントリスナーを設定
+    document.querySelectorAll('.btn-load-history').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = e.target.getAttribute('data-id');
+            loadHistoryItem(id);
+        });
+    });
+
+    document.querySelectorAll('.btn-delete-history').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = e.target.getAttribute('data-id');
+            deleteHistoryItem(id);
+        });
+    });
+}
+
+// 履歴アイテムを読み込む関数
+function loadHistoryItem(id) {
+    const histories = getHistories();
+    const item = histories.find(h => h.id === id);
+
+    if (!item) {
+        alert('履歴が見つかりませんでした');
+        return;
+    }
+
+    if (htmlInput.value.trim() !== '' && !confirm('現在の内容を履歴で上書きしてもよろしいですか？')) {
+        return;
+    }
+
+    htmlInput.value = item.content;
+    updatePreview();
+    closeHistory();
+    alert('履歴を読み込みました');
+}
+
+// 履歴アイテムを削除する関数
+function deleteHistoryItem(id) {
+    if (!confirm('この履歴を削除してもよろしいですか？')) {
+        return;
+    }
+
+    let histories = getHistories();
+    histories = histories.filter(h => h.id !== id);
+    saveHistories(histories);
+    updateHistoryDisplay();
+}
+
+// 全履歴を削除する関数
+function clearAllHistory() {
+    if (!confirm('全ての履歴を削除してもよろしいですか？この操作は取り消せません。')) {
+        return;
+    }
+
+    localStorage.removeItem(HISTORY_STORAGE_KEY);
+    updateHistoryDisplay();
+    alert('全ての履歴を削除しました');
+}
+
+// 履歴モーダルを開く関数
+function openHistory() {
+    updateHistoryDisplay();
+    historyOverlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+// 履歴モーダルを閉じる関数
+function closeHistory() {
+    historyOverlay.classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+// イベントリスナー
+saveHistoryBtn.addEventListener('click', saveToHistory);
+historyBtn.addEventListener('click', openHistory);
+closeHistoryBtn.addEventListener('click', closeHistory);
+clearAllHistoryBtn.addEventListener('click', clearAllHistory);
+
+// オーバーレイの背景をクリックして閉じる
+historyOverlay.addEventListener('click', (e) => {
+    if (e.target === historyOverlay) {
+        closeHistory();
     }
 });
